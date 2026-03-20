@@ -4,7 +4,7 @@ Entry point for the Mood Machine rule based mood analyzer.
 
 from typing import List
 
-from mood_analyzer import MoodAnalyzer
+from mood_analyzer import MoodAnalyzer, print_preprocess_examples
 from dataset import SAMPLE_POSTS, TRUE_LABELS
 
 
@@ -83,6 +83,8 @@ def run_interactive_loop() -> None:
 
 
 if __name__ == "__main__":
+    print_preprocess_examples()
+
     evaluate_rule_based(SAMPLE_POSTS, TRUE_LABELS)
 
     run_batch_demo()

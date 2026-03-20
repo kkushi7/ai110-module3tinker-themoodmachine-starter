@@ -9,6 +9,7 @@ This class starts with very simple logic:
   - Convert that score into a mood label
 """
 
+import re
 from typing import List, Dict, Tuple, Optional
 
 from dataset import POSITIVE_WORDS, NEGATIVE_WORDS
@@ -53,7 +54,10 @@ class MoodAnalyzer:
           - Normalize repeated characters ("soooo" -> "soo")
         """
         cleaned = text.strip().lower()
-        tokens = cleaned.split()
+
+        # Keep words with apostrophes together, and keep emoji/symbol style
+        # tokens separate so later rules can use them.
+        tokens = re.findall(r"[a-z0-9]+(?:'[a-z0-9]+)?|[^\w\s]", cleaned)
 
         return tokens
 
@@ -151,3 +155,22 @@ class MoodAnalyzer:
             f"(positive: {positive_hits or '[]'}, "
             f"negative: {negative_hits or '[]'})"
         )
+
+
+def print_preprocess_examples() -> None:
+    """
+    Print a few tokenization examples to confirm preprocessing behavior.
+    """
+    analyzer = MoodAnalyzer()
+    examples = [
+        "I love this class so much",
+        "That's lowkey so cuteee",
+        "Omg I love that!!!",
+        "I- 💀",
+        "  Feeling TIRED, but kind of hopeful.  ",
+    ]
+
+    print("=== Preprocess Demo ===")
+    for text in examples:
+        tokens = analyzer.preprocess(text)
+        print(f'"{text}" -> {tokens}')
