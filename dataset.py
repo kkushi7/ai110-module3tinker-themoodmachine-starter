@@ -50,6 +50,12 @@ SAMPLE_POSTS = [
     "This is fine",
     "So excited for the weekend",
     "I am not happy about this",
+    "That's lowkey so cuteee",
+    "Omg I love that",
+    "I- 💀",
+    "Stoppp",
+    "That's fine"
+
 ]
 
 # Human labels for each post above.
@@ -65,6 +71,13 @@ TRUE_LABELS = [
     "neutral",   # "This is fine"
     "positive",  # "So excited for the weekend"
     "negative",  # "I am not happy about this"
+    "positive",  # "That's lowkey so cuteee"
+    "positive",  # "Omg I love that"
+    "mixed",     # "I- 💀"
+    "positive",  # "Stoppp"
+    "neutral",   # "That's fine"
+
+
 ]
 
 # TODO: Add 5-10 more posts and labels.
