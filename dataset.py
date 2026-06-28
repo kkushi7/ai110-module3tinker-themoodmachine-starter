@@ -56,7 +56,8 @@ SAMPLE_POSTS = [
     "Omg I love that",
     "I- 💀",
     "Stoppp",
-    "That's fine"
+    "That's fine",
+    "I am not feeling good"
 
 ]
 
@@ -78,6 +79,7 @@ TRUE_LABELS = [
     "mixed",     # "I- 💀"
     "positive",  # "Stoppp"
     "neutral",   # "That's fine"
+    "negative"   # I am not feeling good
 
 
 ]

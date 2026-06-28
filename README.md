@@ -68,3 +68,7 @@ During this lab you will:
 
 Summary: 
 The core concept students needed to understand was that both rule based and ML models are just pattern detectors, and their output depends on how the text is represented and labeled. Most students are likely to struggle when model behavior seems "wrong" even though the code is technically working, especially with slang, negation, emojis, and mixed emotion posts. AI was helpful for speeding up repetitive tasks like drafting starter code, generating edge case examples, and explaining syntax quickly. AI was misleading when it sounded confident about model quality without checking for data limitations or label ambiguity. One way I would guide a student without giving away the answer is to ask them to inspect one failed prediction and trace it through preprocess, score/features, and label mapping step by step. This will give them a clear debugging path they can repeat on other errors.
+
+Questions to ask students:
+- If the model gives a wrong label, whose perspective might be missing from the training words or examples and how could that create fairness issues?
+- Think of a post that a person would read as mixed emotion, sarcasm, or slang heavy. Why do you think the model may misclasify it and how could you fix it?
