@@ -15,6 +15,9 @@ from typing import List, Dict, Tuple, Optional
 from dataset import POSITIVE_WORDS, NEGATIVE_WORDS
 
 
+NEGATION_WORDS = {"not", "no", "never", "n't"}
+
+
 class MoodAnalyzer:
     """
     A very simple, rule based mood classifier.
@@ -65,6 +68,43 @@ class MoodAnalyzer:
     # Scoring logic
     # ---------------------------------------------------------------------
 
+    def _score_tokens(self, tokens: List[str]) -> Tuple[int, List[str], List[str]]:
+        """
+        Score preprocessed tokens and return score plus hit lists.
+
+        A short negation window flips the meaning of nearby sentiment words,
+        so phrases like "not feeling good" are handled as negative.
+        """
+        score = 0
+        positive_hits: List[str] = []
+        negative_hits: List[str] = []
+        negation_window = 0
+
+        for token in tokens:
+            if token in NEGATION_WORDS:
+                negation_window = 2
+                continue
+
+            if token in self.positive_words:
+                if negation_window > 0:
+                    score -= 1
+                    negative_hits.append(f"not {token}")
+                else:
+                    score += 1
+                    positive_hits.append(token)
+            elif token in self.negative_words:
+                if negation_window > 0:
+                    score += 1
+                    positive_hits.append(f"not {token}")
+                else:
+                    score -= 1
+                    negative_hits.append(token)
+
+            if negation_window > 0:
+                negation_window -= 1
+
+        return score, positive_hits, negative_hits
+
     def score_text(self, text: str) -> int:
         """
         Compute a numeric "mood score" for the given text.
@@ -80,14 +120,7 @@ class MoodAnalyzer:
           - Treat emojis or slang (":)", "lol", "💀") as strong signals
         """
         tokens = self.preprocess(text)
-        score = 0
-
-        for token in tokens:
-            if token in self.positive_words:
-                score += 1   # positive signal: add a point
-            elif token in self.negative_words:
-                score -= 1   # negative signal: subtract a point
-
+        score, _, _ = self._score_tokens(tokens)
         return score
 
     # ---------------------------------------------------------------------
@@ -140,18 +173,7 @@ class MoodAnalyzer:
         before you implement it.
         """
         tokens = self.preprocess(text)
-
-        positive_hits: List[str] = []
-        negative_hits: List[str] = []
-        score = 0
-
-        for token in tokens:
-            if token in self.positive_words:
-                positive_hits.append(token)
-                score += 1
-            if token in self.negative_words:
-                negative_hits.append(token)
-                score -= 1
+        score, positive_hits, negative_hits = self._score_tokens(tokens)
 
         return (
             f"Score = {score} "
